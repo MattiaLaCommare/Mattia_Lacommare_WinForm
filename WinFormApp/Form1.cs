@@ -7,8 +7,8 @@ namespace WinFormApp
     {
         //variabili globali, tutte le funzioni possono accederci
         int gravity;  //gravità del personaggio
-        int gravityValue = 10; //valore della gravità, cadi più veloce o più lento
-        int obstacleSpeed = 10; //la velocità con cui ti arrivano gli ostacoli addosso
+        int gravityValue; //valore della gravità, cadi più veloce o più lento
+        int obstacleSpeed; //la velocità con cui ti arrivano gli ostacoli addosso
         int score = 0; //punteggio
         int highScore = 0; //punteggio massimo, si resetta quando riapri il gioco
         bool gameOver = false; //nel caso sia true il gioco si ferma
@@ -32,7 +32,7 @@ namespace WinFormApp
             //---------Timerss----------\\
             powerUpTimer.Interval = 10000;
             powerUpTimer.Tick += powerupTimer_Tick;  
-            dashTimer.Interval = 400;
+            dashTimer.Interval = 200;
             dashTimer.Tick += dashTimer_Tick;
             dashCoolDown.Interval = 1000;
             dashCoolDown.Tick += dashCoolDown_Tick;
@@ -41,46 +41,6 @@ namespace WinFormApp
             RestartGame();
             start.Play();
             //------------SelettoreMappa------------\\
-            int backgroundLoader = random.Next(1, 7);
-            switch (backgroundLoader)  //permette di cambiare lo sfondo e lo stile delle piattaforme in base alla mappa selezionata casuale (7 mappe diverse)
-            {
-                case 1:
-                    this.BackgroundImage = Properties.Resources.background_still; //città blu (anteprima)
-                    this.pictureBox1.BackgroundImage = Properties.Resources.platform_tilesblue;
-                    this.pictureBox2.BackgroundImage = Properties.Resources.platform_tilesblue;
-                    break;
-                case 2:
-                    this.BackgroundImage = Properties.Resources.Citadel; //cittadina viola
-                    this.pictureBox1.BackgroundImage = Properties.Resources.platform_tilesPurple;
-                    this.pictureBox2.BackgroundImage = Properties.Resources.platform_tilesPurple;
-                    break;
-                case 3:
-                    this.BackgroundImage = Properties.Resources.Space; //spazio (la più difficile per via delle piattaforme difficili da notare (punti x2)
-                    this.pictureBox1.BackgroundImage = Properties.Resources.Powerup;
-                    this.pictureBox2.BackgroundImage = Properties.Resources.Powerup;
-                    specialvl = true;
-                    break;
-                case 4:
-                    this.BackgroundImage = Properties.Resources.MountainsForest; //foresta tranquilla
-                    this.pictureBox1.BackgroundImage = Properties.Resources.platform_green;
-                    this.pictureBox2.BackgroundImage = Properties.Resources.platform_green;
-                    break;
-                case 5:
-                    this.BackgroundImage = Properties.Resources.Matrix; //matrix (il mio preferito)
-                    this.pictureBox1.BackgroundImage = Properties.Resources.platform_tilesMatrix;
-                    this.pictureBox2.BackgroundImage = Properties.Resources.platform_tilesMatrix;
-                    break;
-                case 6:
-                    this.BackgroundImage = Properties.Resources.Sunset; //tramonto
-                    this.pictureBox1.BackgroundImage = Properties.Resources.platform_tilesSunset;
-                    this.pictureBox2.BackgroundImage = Properties.Resources.platform_tilesSunset;
-                    break;
-                case 7:
-                    this.BackgroundImage = Properties.Resources.MountainsSunny; //montagne soleggiate
-                    this.pictureBox1.BackgroundImage = Properties.Resources.platform_green;
-                    this.pictureBox2.BackgroundImage = Properties.Resources.platform_green;
-                    break;
-            }
 
         }
         private void GameTimerEvent(object sender, EventArgs e) //questo è il timer del gioco, finche il timer è attivo tutto il gioco funziona
@@ -172,7 +132,7 @@ namespace WinFormApp
 
                     if (x.Bounds.IntersectsWith(player.Bounds))
                     {
-                        score += 20;
+                        score += 1;
                         powerup = true;
                         powerUpTimer.Start();
                     }
@@ -185,8 +145,8 @@ namespace WinFormApp
                 if (i % 10 == 0)  // Ogni 10 punti
                 {
                     int level = i / 10;  // Determina il livello in base al punteggio
-                    obstacleSpeed = 10 + (level * 5);  // Aumenta la velocità in base al livello
-                    gravityValue = 10 + (level * 5);  // Aumenta la gravità in base al livello
+                    obstacleSpeed = obstacleSpeed + (level * 5);  // Aumenta la velocità in base al livello
+                    gravityValue = gravityValue + (level * 5);  // Aumenta la gravità in base al livello
 
                     // Colori casuali basati sul livello
                     Color[] colors = new Color[]
@@ -206,15 +166,15 @@ namespace WinFormApp
 
                     if (i > 9)
                     {
-                        obstacleSpeed = 10 + ((i / 10) * 10);
-                        gravityValue = 10 + ((i / 10) * 10);
+                        obstacleSpeed = obstacleSpeed + ((i / 10) * 10);
+                        gravityValue = gravityValue + ((i / 10) * 10);
                     }
                 }
             }
 
         }
 
-        //-------------------------KEYBINDINGS------------------------\\
+        //--------------------_________________-----KEYBINDINGS----------____________________--------------\\
         private void KeyIsUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Space)
@@ -240,7 +200,7 @@ namespace WinFormApp
             {
                 dash = true;
                 gravity = 0;
-                obstacleSpeed += 20;
+                obstacleSpeed = obstacleSpeed * 5;
                 dashTimer.Start();
                 dashSound.Play();
             }
@@ -249,6 +209,7 @@ namespace WinFormApp
         //-----------Impostazioni Di Restart------------\\
         private void RestartGame()
         {
+            gameOver = false;
             onBottomPlatform = true;
             lblScore.Parent = pictureBox1;
             lblhighScore.Parent = pictureBox2;
@@ -256,10 +217,51 @@ namespace WinFormApp
             player.Location = new Point(180, 149);
             player.Image = Properties.Resources.run_down0;
             score = 0;
-            gravityValue = 8;
+            gravityValue = 15;
+            obstacleSpeed = 15;
             gravity = gravityValue;
-            obstacleSpeed = 10;
             start.Play();
+
+            int backgroundLoader = random.Next(3,3);
+            switch (backgroundLoader)  //permette di cambiare lo sfondo e lo stile delle piattaforme in base alla mappa selezionata casuale (7 mappe diverse)
+            {
+                case 1:
+                    this.BackgroundImage = Properties.Resources.background_still; //città blu (anteprima)
+                    this.pictureBox1.BackgroundImage = Properties.Resources.platform_tilesblue;
+                    this.pictureBox2.BackgroundImage = Properties.Resources.platform_tilesblue;
+                    break;
+                case 2:
+                    this.BackgroundImage = Properties.Resources.Citadel; //cittadina viola
+                    this.pictureBox1.BackgroundImage = Properties.Resources.platform_tilesPurple;
+                    this.pictureBox2.BackgroundImage = Properties.Resources.platform_tilesPurple;
+                    break;
+                case 3:
+                    this.BackgroundImage = Properties.Resources.Space; //spazio (la più difficile per via delle piattaforme difficili da notare (punti x2)
+                    this.pictureBox1.BackgroundImage = Properties.Resources.Powerup;
+                    this.pictureBox2.BackgroundImage = Properties.Resources.Powerup;
+                    specialvl = true;
+                    break;
+                case 4:
+                    this.BackgroundImage = Properties.Resources.MountainsForest; //foresta tranquilla
+                    this.pictureBox1.BackgroundImage = Properties.Resources.platform_green;
+                    this.pictureBox2.BackgroundImage = Properties.Resources.platform_green;
+                    break;
+                case 5:
+                    this.BackgroundImage = Properties.Resources.Matrix; //matrix (il mio preferito)
+                    this.pictureBox1.BackgroundImage = Properties.Resources.platform_tilesMatrix;
+                    this.pictureBox2.BackgroundImage = Properties.Resources.platform_tilesMatrix;
+                    break;
+                case 6:
+                    this.BackgroundImage = Properties.Resources.Sunset; //tramonto
+                    this.pictureBox1.BackgroundImage = Properties.Resources.platform_tilesSunset;
+                    this.pictureBox2.BackgroundImage = Properties.Resources.platform_tilesSunset;
+                    break;
+                case 7:
+                    this.BackgroundImage = Properties.Resources.MountainsSunny; //montagne soleggiate
+                    this.pictureBox1.BackgroundImage = Properties.Resources.platform_green;
+                    this.pictureBox2.BackgroundImage = Properties.Resources.platform_green;
+                    break;
+            }
 
             //-----------------Nascita Degli Ostacli---------------------\\
 
@@ -296,7 +298,7 @@ namespace WinFormApp
             if (dash == true)
             {
                 dashCoolDown.Start();
-                obstacleSpeed -= 20;
+                obstacleSpeed = obstacleSpeed / 5;
                 dashTimer.Stop();
                 if (onTopPlatform == true)
                 {
