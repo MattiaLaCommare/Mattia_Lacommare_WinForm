@@ -17,6 +17,7 @@
     <None Remove="audio\Land.wav" />
     <None Remove="audio\ObstacleSkip.wav" />
     <None Remove="audio\Speedup.wav" />
+    <None Remove="audio\StartGame.wav" />
   </ItemGroup>
 
   <ItemGroup>
@@ -72,6 +73,9 @@
     </Content>
     <Content Include="audio\Speedup.wav">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="audio\StartGame.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

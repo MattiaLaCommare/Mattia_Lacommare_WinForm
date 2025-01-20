@@ -1,3 +1,4 @@
+using System.Diagnostics.Eventing.Reader;
 using System.Media;
 using System.Windows.Forms;
 
@@ -5,228 +6,135 @@ namespace WinFormApp
 {
     public partial class Gioco : Form
     {
-        //variabili globali, tutte le funzioni possono accederci
-        int gravity;  //gravità del personaggio
-        int gravityValue; //valore della gravità, cadi più veloce o più lento
-        int obstacleSpeed; //la velocità con cui ti arrivano gli ostacoli addosso
-        int score = 0; //punteggio
-        int highScore = 0; //punteggio massimo, si resetta quando riapri il gioco
-        bool gameOver = false; //nel caso sia true il gioco si ferma
-        bool powerup = false; //easter egg, se trovi un piccione ti rederà immortale per 10 secondi
-        bool dash = false; //se è true farai uno scatto in avanti rimanendo fermo in aria per un attimo, ideale per saltare ostacoli che bloccano
-        bool onTopPlatform = false; //quando sei sulla piattaforma in alto
-        bool onBottomPlatform = false; //quando sei sulla piattaforma in basso
-        bool specialvl = false;
-        Random random = new Random(); 
-        SoundPlayer land = new SoundPlayer(@"audio\Land.wav"); //suono atterragio
-        SoundPlayer jump = new SoundPlayer(@"audio\Jump.wav"); //suono salto
-        SoundPlayer start = new SoundPlayer(@"audio\Speedup.wav"); //suono di quando si inizia, rinominato male perchè vecchio
-        SoundPlayer obstacleSkip = new SoundPlayer(@"audio\ObstacleSkip.wav"); //suono di quando superi un ostacolo
-        SoundPlayer dashSound = new SoundPlayer(@"audio\Dash.wav");//suono dello scatto
-        SoundPlayer death = new SoundPlayer(@"audio\Death.wav");
-        private System.Windows.Forms.Timer powerUpTimer = new System.Windows.Forms.Timer(); //timer per il powerup, 10 sec, quando si attiva rende powerup off
-        private System.Windows.Forms.Timer dashTimer = new System.Windows.Forms.Timer(); //timer dash, durata minore di 1 sec, tempo in aria durante lo scatto
-        private System.Windows.Forms.Timer dashCoolDown = new System.Windows.Forms.Timer(); //cooldown per il dash, non si può spammare e bisogna aspettare 1 sec
-        public Gioco() //questo è il costruttore del gioco, ogni volta che si avvia il form viene creato e tutti questi dati si attivano
+        //-----------------------------------------------------------------------------------------------------------------VARIABILI GLOBALI
+        int gravity;  
+        int gravityValue; 
+        int obstacleSpeed; //Velocità del gioco 
+        int score = 0; 
+        int level = 0; //livello per aumentare la velocità
+        int powerupMiniTimer = 5; //secondi del powerup quandoa attivato
+        int highScore = 0;
+        bool gameOver = false; //se perdi
+        bool powerup = false; //scudo (solo quello)
+        bool dash = false; 
+        bool onTopPlatform = false; 
+        bool onBottomPlatform = false; 
+        bool powerupAntiFor = false; //serve per non far ripetere durante gametimer un azione specifica riguardante il powerup
+        bool startGame = true; //quando inizia il gioco bisogna avviare il gioco la prima volta e poi non c'è più
+        Random random = new Random();
+        //-----------------------------------------------------------------------------------------------------------------------------SUONI
+        SoundPlayer land = new SoundPlayer(@"audio\Land.wav");  //atterraggio
+        SoundPlayer jump = new SoundPlayer(@"audio\Jump.wav");  //salto
+        SoundPlayer start = new SoundPlayer(@"audio\Speedup.wav"); //inizo il gioco - powerup
+        SoundPlayer obstacleSkip = new SoundPlayer(@"audio\ObstacleSkip.wav");  //salti l'ostacolo
+        SoundPlayer dashSound = new SoundPlayer(@"audio\Dash.wav"); //dash
+        SoundPlayer death = new SoundPlayer(@"audio\Death.wav"); //morte
+        SoundPlayer startGameMusic = new SoundPlayer(@"audio\StartGame.wav"); // musica background per l'avvio
+        //----------------------------------------------------------------------------------------------------------------------------TIMERS
+        private System.Windows.Forms.Timer powerUpTimer = new System.Windows.Forms.Timer();  //5 secondi, durata powerup
+        private System.Windows.Forms.Timer dashTimer = new System.Windows.Forms.Timer(); //durata dash
+        private System.Windows.Forms.Timer pwpLabelTimer = new System.Windows.Forms.Timer(); //timer per label powerup
+        private System.Windows.Forms.Timer dashCoolDown = new System.Windows.Forms.Timer();  //cooldown dash
+
+        //-----------------------------------------------------------------------------------------------------------------COSTRUTTORE GIOCO
+        public Gioco()//quando si avvia parte prima di tutto questo 
         {
-            //---------Timerss----------\\
-            powerUpTimer.Interval = 10000;
-            powerUpTimer.Tick += powerupTimer_Tick;  
+            //---------------------------------------------------------------------------------------------------------------SETUP TIMERS
+            pwpLabelTimer.Interval = 1000;
+            pwpLabelTimer.Tick += pwpLabelTimer_Tick;
+            powerUpTimer.Interval = 5000;
+            powerUpTimer.Tick += powerupTimer_Tick;
             dashTimer.Interval = 200;
             dashTimer.Tick += dashTimer_Tick;
             dashCoolDown.Interval = 1000;
             dashCoolDown.Tick += dashCoolDown_Tick;
-            //-----------InizioGioco-----------\\
+
+            //-----------------------------------------------------------------------------------------------------------SCHERMATA INIZIALE
             InitializeComponent();
-            RestartGame();
-            start.Play();
-            //------------SelettoreMappa------------\\
-
-        }
-        private void GameTimerEvent(object sender, EventArgs e) //questo è il timer del gioco, finche il timer è attivo tutto il gioco funziona
-        {
-            //--------------ImpostazionePunteggio----------\\
-            lblScore.ForeColor = Color.White;
-            lblScore.Text = "Score: " + score;
-            lblhighScore.Text = "High Score: " + highScore; 
-            player.Top += gravity;
-            onBottomPlatform = true;
-
-            //-----------PlayerATerraBasso--------\\
-            if (player.Top > 328)
+            if (startGame)
             {
-                gravity = 0;
-                player.Top = 328;
-                player.Image = Properties.Resources.run_down0;
-                land.Play();
-                onBottomPlatform = true;
-                onTopPlatform = false;
-                dashCoolDown.Stop();
-                dash = false;
+                startGameMusic.Play(); 
+                lblGameOver1.Text = "Gravity Runner";
+                lblGameOver1.ForeColor = Color.Lime;
+                lblGameOver1.Visible = true;
+                gameOver = true; //Così posso cliccare "enter" dato il blocco per il restart
             }
-            //------------------PlayerATerraAlto------------------\\
-            else if (player.Top < 35)
+            else
             {
-                gravity = 0;
-                player.Top = 35;
-                player.Image = Properties.Resources.run_up0;
-                land.Play();
-                onTopPlatform = true;
-                onBottomPlatform = false;
-                dashCoolDown.Stop();
-                dash = false;
+                startGame = false;
+                RestartGame(); //inizia seriamente il gioco
+                start.Play();
             }
-            //-------------------MovimentoOstaocli+Punteggio---------------\\
-            foreach (Control x in this.Controls)
-            {
-                if (x is PictureBox && (string)x.Tag == "obstacle")
-                {
-                    x.Left -= obstacleSpeed;
-                    
-                    //--------RespawnOstacoli------\\
-                    if (x.Left < -100)
-                    {
-                        x.Left = random.Next(1000, 4000);
-                        if (specialvl == true)
-                        {
-                            score += 2;
-                            obstacleSkip.Play();
-                        }
-                        else
-                        {
-                            score += 1;
-                            obstacleSkip.Play();
-                        }
-                    }
-
-                    //---------------------HitBox--------------------\\
-                    if (x.Bounds.IntersectsWith(player.Bounds))
-                    {
-                        if (powerup == false)
-                        {
-                            death.Play();
-                            gameOver = true;
-                            gameTimer.Stop();
-                            lblScore.Text += "   Game Over!! Press Enter to Restart.";
-                            //set the highscore
-                            if (score > highScore)
-                            {
-                                highScore = score;
-                            }
-                        }
-                    }
-                }
-            }
-            //----------------------------MovimentoPiccione+Powerup------------------\\
-            foreach (Control x in this.Controls)
-            {
-                if (x is PictureBox && (string)x.Tag == "pidgeon")
-                {
-                    x.Left -= obstacleSpeed;
-
-                    if (x.Left < -100)
-                    {
-                        x.Left = random.Next(800, 200000);
-                        score += 1;
-                    }
-
-                    if (x.Bounds.IntersectsWith(player.Bounds))
-                    {
-                        score += 1;
-                        powerup = true;
-                        powerUpTimer.Start();
-                    }
-                }
-            }
-
-            //-----------------------AUMENTO DIFFICOLTA---------------------\\
-            for (int i = 9; i < score; i++)
-            {
-                if (i % 10 == 0)  // Ogni 10 punti
-                {
-                    int level = i / 10;  // Determina il livello in base al punteggio
-                    obstacleSpeed = obstacleSpeed + (level * 5);  // Aumenta la velocità in base al livello
-                    gravityValue = gravityValue + (level * 5);  // Aumenta la gravità in base al livello
-
-                    // Colori casuali basati sul livello
-                    Color[] colors = new Color[]
-                    {
-                Color.Red, Color.DarkRed, Color.Brown, Color.Purple, Color.Blue,
-                Color.Cyan, Color.Yellow, Color.Green, Color.Orange, Color.Pink,
-                Color.Black, Color.White, Color.Gray, Color.LightBlue, Color.Violet,
-                Color.LightGreen, Color.LightPink, Color.Beige, Color.Indigo, Color.Salmon,
-                Color.MintCream, Color.SeaGreen, Color.Tomato, Color.Gold, Color.Lime,
-                Color.SkyBlue, Color.PeachPuff, Color.Moccasin, Color.Lavender, Color.Fuchsia,
-                Color.LightGoldenrodYellow, Color.DodgerBlue, Color.Tan, Color.AliceBlue,
-                Color.Wheat, Color.SlateGray, Color.LavenderBlush, Color.PapayaWhip, Color.DarkOrange,
-                Color.OrangeRed, Color.MediumPurple
-                    };
-
-                    lblScore.ForeColor = colors[level % colors.Length];  // Imposta il colore in modo ciclico
-
-                    if (i > 9)
-                    {
-                        obstacleSpeed = obstacleSpeed + ((i / 10) * 10);
-                        gravityValue = gravityValue + ((i / 10) * 10);
-                    }
-                }
-            }
-
         }
 
-        //--------------------_________________-----KEYBINDINGS----------____________________--------------\\
-        private void KeyIsUp(object sender, KeyEventArgs e)
+
+        //---------------------------------------------------------------------------------------------------------------------------COMANDI
+        private void KeyIsUp(object sender, KeyEventArgs e) //keyeventargs è quando un tasto è schiacciato
         {
-            if (e.KeyCode == Keys.Space)
+            if (e.KeyCode == Keys.Space) //---------------------------------------------------------------------------------------COMANDI - SPAZIO
             {
-                if (player.Top == 328)
+                if (player.Top == 328) //top platform
                 {
                     player.Top -= 10;
                     gravity = -gravityValue;
                     jump.Play();
                 }
-                else if (player.Top == 35)
+                else if (player.Top == 35) //bottom platform
                 {
                     player.Top += 10;
                     gravity = gravityValue;
                     jump.Play();
                 }
             }
-            if (e.KeyCode == Keys.Enter && gameOver == true) // = a scrivere "&& gameOver" (perchè guarda direttamente se è true)
+            if (e.KeyCode == Keys.Enter && gameOver)  //blocco per evitare lo spam di restart -----------------------------------COMANDI - INVIA
             {
                 RestartGame();
             }
-            if (e.KeyCode == Keys.C && !dash)
+            if (e.KeyCode == Keys.C && !dash && !gameOver) //funzionalità intera dash ---------------------------------------------------------COMANDI - C
             {
                 dash = true;
-                gravity = 0;
-                obstacleSpeed = obstacleSpeed * 5;
-                dashTimer.Start();
+                gravity = 0; //rimane fermo a mezz'aria
+                obstacleSpeed = obstacleSpeed + 10 * 5;
+                dashTimer.Start(); //timer x durata dash
                 dashSound.Play();
+                if (powerup)
+                {
+                    player.Left -= 40;
+                    player.Size = new Size(120, 80);
+                    if (onTopPlatform) //sprites se si ha anche il powerup
+                    {
+                        player.Image = Properties.Resources.Dash_Shield_Up; 
+                    }
+                    else if (onBottomPlatform)
+                    {
+                        player.Image = Properties.Resources.Dash_Shield_Down;
+                    }
+                }
+                else //sprites normali del dash
+                {
+                    player.Left -= 40; //serviva ingrandirlo
+                    player.Size = new Size(106, 80);
+                    if (onTopPlatform)
+                    {
+                        player.Image = Properties.Resources.Dash_Down;
+                    }
+                    else if (onBottomPlatform)
+                    {
+                        player.Image = Properties.Resources.Dash_Up;
+                    }
+                }
             }
         }
 
-        //-----------Impostazioni Di Restart------------\\
-        private void RestartGame()
+        //---------------------------------------------------------------------------------------------------------------------- AVVIO GIOCO
+        private void RestartGame() //vale anche per restart
         {
-            gameOver = false;
-            onBottomPlatform = true;
-            lblScore.Parent = pictureBox1;
-            lblhighScore.Parent = pictureBox2;
-            lblhighScore.Top = 0;
-            player.Location = new Point(180, 149);
-            player.Image = Properties.Resources.run_down0;
-            score = 0;
-            gravityValue = 15;
-            obstacleSpeed = 15;
-            gravity = gravityValue;
-            start.Play();
-
-            int backgroundLoader = random.Next(3,3);
-            switch (backgroundLoader)  //permette di cambiare lo sfondo e lo stile delle piattaforme in base alla mappa selezionata casuale (7 mappe diverse)
+            //--------------------------------------------------------------------------------------------------------------.SELETTORE MAPPE
+            int backgroundLoader = random.Next(1, 7);
+            switch (backgroundLoader)  //7 mappe diverse random
             {
                 case 1:
-                    this.BackgroundImage = Properties.Resources.background_still; //città blu (anteprima)
+                    this.BackgroundImage = Properties.Resources.background_still; //città blu
                     this.pictureBox1.BackgroundImage = Properties.Resources.platform_tilesblue;
                     this.pictureBox2.BackgroundImage = Properties.Resources.platform_tilesblue;
                     break;
@@ -236,10 +144,9 @@ namespace WinFormApp
                     this.pictureBox2.BackgroundImage = Properties.Resources.platform_tilesPurple;
                     break;
                 case 3:
-                    this.BackgroundImage = Properties.Resources.Space; //spazio (la più difficile per via delle piattaforme difficili da notare (punti x2)
+                    this.BackgroundImage = Properties.Resources.Space; //spazio
                     this.pictureBox1.BackgroundImage = Properties.Resources.Powerup;
                     this.pictureBox2.BackgroundImage = Properties.Resources.Powerup;
-                    specialvl = true;
                     break;
                 case 4:
                     this.BackgroundImage = Properties.Resources.MountainsForest; //foresta tranquilla
@@ -262,10 +169,36 @@ namespace WinFormApp
                     this.pictureBox2.BackgroundImage = Properties.Resources.platform_green;
                     break;
             }
+            //------------------------------------------------------------------------------------------------------------------RESET STATS
+            player.Image = Properties.Resources.run_down0;
+            player.Location = new Point(180, 149);
+            score = 0;
+            level = 0;
+            obstacleSpeed = 15;
+            gravityValue = 15;
+            gravity = gravityValue;
+            onBottomPlatform = true;
+            gameOver = false;
+            powerup = false;
 
-            //-----------------Nascita Degli Ostacli---------------------\\
+            //--------------------------------------------------------------------------------------------------------------PARENTELE LABLES
+            lblScore.Parent = pictureBox2;       //parentele utilizzate per impostare la trasparenza degli oggetti
+            lblhighScore.Parent = pictureBox2;
+            lblDashCooldown.Parent = pictureBox2;
+            lblSpeedLvl.Parent = pictureBox1;
+            lblPowerupMiniTimer.Parent = pictureBox2;
+            //------------------------------------------------------------------------------------------------------------------SETUP LABLES
+            lblDashCooldown.Top = 10;
+            lblPowerupMiniTimer.Top = 40;
+            lblScore.Top = 10;
+            lblhighScore.Top = 40;
+            lblGameOver1.Visible = false;
+            lblGameOver2.Visible = false;
 
-            foreach (Control x in this.Controls)
+            start.Play();
+
+            //--------------------------------------------------------------------------------------------------------------NASCITA OSTACOLI
+            foreach (Control x in this.Controls) //di solito sono pictureboxes, sono oggetti con rappresentazioni visuali
             {
                 if (x is PictureBox && (string)x.Tag == "obstacle")
                 {
@@ -274,52 +207,239 @@ namespace WinFormApp
             }
             foreach (Control x in this.Controls)
             {
-                if (x is PictureBox && (string)x.Tag == "pidgeon")
+                if (x is PictureBox && (string)x.Tag == "Shield") //-----------------------------------------------------------------POWERUP
                 {
-                    x.Left = random.Next(1000, 50000);
+                    x.Left = random.Next(10000, 20000);
                 }
             }
             gameTimer.Start();
         }
 
-        private void PowerupTime(object sender, EventArgs e)  //-----Non usato
-        { }
-
-        private void powerupTimer_Tick(object sender, EventArgs e)
+        //-----------------------------------------------------------------------------------------------------------------------TIMER GIOCO
+        private void GameTimerEvent(object sender, EventArgs e) //il timer del gioco, si aggiorna molto velocemente 
         {
-            if (powerup == true)
+            //-----------------------------------------------------------------------------------------------------------IMPOSTAZIONE LABELS
+            lblScore.ForeColor = Color.White;
+            lblScore.Text = "Score: " + score;
+            lblhighScore.Text = "High Score: " + highScore;
+            
+            if (dash) { lblDashCooldown.Text = "Dash: Not Ready!"; }
+            else { lblDashCooldown.Text = "Dash: Ready!"; }
+            
+            lblSpeedLvl.Text = "Speed Level: " + level;
+
+            //------------------------------------------------------------------------------------------------------IMPOSTAZIONE PERSONAGGIO
+            player.Top += gravity;
+            onBottomPlatform = true;
+
+            //-------------------------------------------------------------------------------------------------------ATTERRAGGIO PLATFORM SU
+            if (player.Top > 328) //posizione BottomPlatform 
             {
-                powerup = false;
+                gravity = 0;
+                player.Top = 328;
+
+                if (powerup) //cambia la sprite se ha il powerup
+                {
+                    player.Image = Properties.Resources.Shield_Up; //sarebbe down
+                    player.Size = new Size(86, 80);
+                }
+                else //se no quella normale
+                {
+                    player.Image = Properties.Resources.run_down0;
+                }
+
+                land.Play();
+                //setta in che piattaforma è il player ora
+                onBottomPlatform = true;
+                onTopPlatform = false;
+                //se atterra in una piattaforma il cooldown per il dash si resetta (si può spammare per terra)
+                dashCoolDown.Stop();
+                dash = false;
+            }
+            //-----------------------------------------------------------------------------------------------------ATTERRAGGIO PLATFORM GIU'
+            else if (player.Top < 35) //Posizione TopPlatForm
+            {
+                gravity = 0;
+                player.Top = 35;
+
+                if (powerup)
+                {
+                    player.Image = Properties.Resources.Shield_Down; //sarebbe Up
+                    player.Size = new Size(86, 80);
+                }
+                else
+                {
+                    player.Image = Properties.Resources.run_up0;
+                }
+
+                land.Play();
+                
+                onTopPlatform = true;
+                onBottomPlatform = false;
+                dashCoolDown.Stop();
+                dash = false;
+            }
+            //------------------------------------------------------------------------------------------------------RESPAWN OSTACOLI + SCORE
+            foreach (Control x in this.Controls)
+            {
+                if (x is PictureBox && (string)x.Tag == "obstacle")
+                {
+                    x.Left -= obstacleSpeed;  //gli ostacoli si muovono verso sinistra
+
+                    //---------------------------------------------------------------------------------------------------------------RESPAWN
+                    if (x.Left < -100)
+                    {
+                            x.Left = random.Next(1000, 4000);
+                            score += 1;
+                            obstacleSkip.Play();
+                    }
+
+                    //----------------------------------------------------------------------------------------------------------------HITBOX
+                    if (x.Bounds.IntersectsWith(player.Bounds))
+                    {
+                        if (powerup == false)
+                        {
+                            death.Play();
+                            gameOver = true;
+                            gameTimer.Stop(); //si ferma il gioco
+
+                            //setup label per il gameover
+                            lblGameOver1.Text = "Game Over";
+                            lblGameOver1.ForeColor = Color.Red;
+                            lblGameOver1.Visible = true;
+                            lblGameOver2.Visible = true;
+                            //set the highscore
+                            if (score > highScore)
+                            {
+                                highScore = score;
+                            }
+                        }
+                    }
+                }
+            }
+            //---------------------------------------------------------------------------------------------------------------RESPAWN POWERUP
+            foreach (Control x in this.Controls)
+            {
+                if (x is PictureBox && (string)x.Tag == "Shield")
+                {
+                    x.Left -= obstacleSpeed;
+
+                    if (x.Left < -100)
+                    {
+                        x.Left = random.Next(10000, 20000);
+                    }
+                    //--------------------------------------------------------------------------------------------------------HITBOX POWERUP
+                    if (x.Bounds.IntersectsWith(player.Bounds) && !powerupAntiFor)
+                    {//powerup serve per non ripetersi nel foreach o gametimer
+                    
+                        player.Left -= 20; //per ingrandirlo
+                        powerup = true;
+                        powerupAntiFor = true;
+                        powerupMiniTimer = 4; //parte da 4 perchè un secondo lo spreca 1 tick del circuito  
+
+                        powerUpTimer.Start(); //start timers
+                        pwpLabelTimer.Start();
+
+                        lblPowerupMiniTimer.Text = "Powerup: " + powerupMiniTimer + "s"; //inizia il timer
+                        
+                        start.Play();
+                    }
+                }
+            }
+
+            //-------------------------------------------------------------------------------------------------------------------DIFFICOLTA'
+            for (int i = 9; i < score; i++)
+            {
+                if (!dash)
+                {
+                    if (i % 10 == 0)  // Ogni 10 punti
+                    {
+                        level = i / 10;  // Determina il livello in base al punteggio
+                        obstacleSpeed = obstacleSpeed + (level * 5);  // Aumenta la velocità in base al livello
+                        gravityValue = gravityValue + (level * 10);  // Aumenta la gravità in base al livello
+
+                        if (i > 9)
+                        {
+                            obstacleSpeed = 15 + ((i / 10) * 10);
+                            gravityValue = 10 + ((i / 10) * 10);
+                        }
+                    }
+                }
             }
         }
-
-        private void dashTimer_Tick(Object sender, EventArgs e)
+        private void powerupTimer_Tick(object sender, EventArgs e) //---------------------------------------------------TIMER DURATA POWERUP
         {
-            if (dash == true)
+            if (powerup) //setup delle sprites
             {
-                dashCoolDown.Start();
-                obstacleSpeed = obstacleSpeed / 5;
-                dashTimer.Stop();
-                if (onTopPlatform == true)
+                if (onTopPlatform)
                 {
-                    gravity -= gravityValue;
+                    player.Image = Properties.Resources.run_up0; ;
                 }
-                else if (onBottomPlatform == true)
+                else if (onBottomPlatform)
                 {
+                    player.Image = Properties.Resources.run_down0;
+                }
+            }
+            powerup = false;
+            powerupAntiFor = false; //nel caso bisogna ricaricare un altra volta il for per bloccarlo al primo utilizzo
+            player.Top += 20; //rimpicciolisco il player per farlo tornare normale
+            player.Size = new Size(66, 80);
+        }
+
+        private void dashTimer_Tick(Object sender, EventArgs e) //---------------------------------------------------------TIMER DURATA DASH
+        {
+            if (dash)
+            {
+                dashCoolDown.Start(); //timers
+                dashTimer.Stop();
+
+                obstacleSpeed = obstacleSpeed - 10 * 5;  //velocità aumentata del dash
+                
+                
+                player.Left += 40; //cambio grandezza e carico sprites
+                player.Size = new Size(66, 80);
+                if (onTopPlatform)
+                {
+                    player.Image = Properties.Resources.run_up0;
+                    gravity -= gravityValue; //ritorna alla gravità che aveva prima di fare il dash
+                }
+                else if (onBottomPlatform)
+                {
+                    player.Image = Properties.Resources.run_down0;
                     gravity += gravityValue;
                 }
-
             }
         }
-        private void dashCoolDown_Tick(object sender, EventArgs e)
+        private void dashCoolDown_Tick(object sender, EventArgs e) //---------------------------------------------TIMER DURATA COOLDOWN DASH
         {
             dash = false;
             dashCoolDown.Stop();
         }
 
-        private void pictureBox3_Click(object sender, EventArgs e)   //----- Ho cliccato per sbaglio
+        private void pwpLabelTimer_Tick(object sender, EventArgs e) //---------------------------------------------TIMER LABEL POWERUP TEMPO
         {
-
+            if (powerupMiniTimer > 0) //se è più grande scende
+            {
+                powerupMiniTimer--;
+                lblPowerupMiniTimer.Text = "Powerup: " + powerupMiniTimer + "s";
+            }
+            else //se no rimane none, visto che non ci sono powerup attivi
+            {
+                lblPowerupMiniTimer.Text = "Powerup: none";
+            }
         }
+
+
+
+
+        //----------------------------------------------------------------------------------------------------------------------COSE INUTILI
+        private void pictureBox3_Click(object sender, EventArgs e) { }
+        private void player_Click(object sender, EventArgs e) { }
+        private void lblhighScore_Click(object sender, EventArgs e) { }
+        private void CoolDown_Click(object sender, EventArgs e) { }
+        private void PowerupTime(object sender, EventArgs e) { }
+        private void lblSpeedLvl_Click(object sender, EventArgs e) { }
+        private void lblGameOver1_Click(object sender, EventArgs e) { }
+
     }
 }

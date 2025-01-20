@@ -41,6 +41,11 @@
             pictureBox6 = new PictureBox();
             pictureBox7 = new PictureBox();
             pictureBox8 = new PictureBox();
+            lblDashCooldown = new Label();
+            lblGameOver1 = new Label();
+            lblGameOver2 = new Label();
+            lblSpeedLvl = new Label();
+            lblPowerupMiniTimer = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)player).BeginInit();
@@ -57,7 +62,7 @@
             pictureBox1.BackgroundImage = Properties.Resources.platform_tilesblue1;
             pictureBox1.Location = new Point(0, 0);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(827, 50);
+            pictureBox1.Size = new Size(787, 50);
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             // 
@@ -66,7 +71,7 @@
             pictureBox2.BackgroundImage = Properties.Resources.platform_tilesblue;
             pictureBox2.Location = new Point(0, 402);
             pictureBox2.Name = "pictureBox2";
-            pictureBox2.Size = new Size(813, 98);
+            pictureBox2.Size = new Size(787, 80);
             pictureBox2.TabIndex = 1;
             pictureBox2.TabStop = false;
             // 
@@ -80,14 +85,15 @@
             player.SizeMode = PictureBoxSizeMode.StretchImage;
             player.TabIndex = 2;
             player.TabStop = false;
+            player.Click += player_Click;
             // 
             // pictureBox3
             // 
             pictureBox3.BackColor = Color.Transparent;
-            pictureBox3.Image = Properties.Resources.Rocks1;
-            pictureBox3.Location = new Point(577, 318);
+            pictureBox3.Image = Properties.Resources.Rocks2;
+            pictureBox3.Location = new Point(570, 301);
             pictureBox3.Name = "pictureBox3";
-            pictureBox3.Size = new Size(147, 97);
+            pictureBox3.Size = new Size(147, 114);
             pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox3.TabIndex = 3;
             pictureBox3.TabStop = false;
@@ -110,11 +116,11 @@
             // 
             lblScore.AutoSize = true;
             lblScore.BackColor = Color.Transparent;
-            lblScore.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblScore.Font = new Font("AniMe Matrix - MB_EN", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblScore.ForeColor = SystemColors.Control;
-            lblScore.Location = new Point(12, 9);
+            lblScore.Location = new Point(12, 412);
             lblScore.Name = "lblScore";
-            lblScore.Size = new Size(91, 30);
+            lblScore.Size = new Size(155, 29);
             lblScore.TabIndex = 5;
             lblScore.Text = "Score: 0";
             // 
@@ -122,13 +128,14 @@
             // 
             lblhighScore.AutoSize = true;
             lblhighScore.BackColor = Color.Transparent;
-            lblhighScore.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblhighScore.Font = new Font("AniMe Matrix - MB_EN", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblhighScore.ForeColor = SystemColors.Control;
-            lblhighScore.Location = new Point(12, 421);
+            lblhighScore.Location = new Point(12, 445);
             lblhighScore.Name = "lblhighScore";
-            lblhighScore.Size = new Size(145, 30);
+            lblhighScore.Size = new Size(232, 29);
             lblhighScore.TabIndex = 6;
             lblhighScore.Text = "High Score: 0";
+            lblhighScore.Click += lblhighScore_Click;
             // 
             // gameTimer
             // 
@@ -163,14 +170,14 @@
             // pictureBox7
             // 
             pictureBox7.BackColor = Color.Transparent;
-            pictureBox7.Image = Properties.Resources.Pidgeon;
-            pictureBox7.Location = new Point(306, 357);
+            pictureBox7.Image = Properties.Resources.ShieldPwrp;
+            pictureBox7.Location = new Point(340, 197);
             pictureBox7.Name = "pictureBox7";
-            pictureBox7.Size = new Size(49, 49);
-            pictureBox7.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox7.Size = new Size(55, 47);
+            pictureBox7.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox7.TabIndex = 9;
             pictureBox7.TabStop = false;
-            pictureBox7.Tag = "pidgeon";
+            pictureBox7.Tag = "Shield";
             // 
             // pictureBox8
             // 
@@ -184,25 +191,95 @@
             pictureBox8.TabStop = false;
             pictureBox8.Tag = "obstacle";
             // 
+            // lblDashCooldown
+            // 
+            lblDashCooldown.AutoSize = true;
+            lblDashCooldown.BackColor = Color.Transparent;
+            lblDashCooldown.FlatStyle = FlatStyle.Popup;
+            lblDashCooldown.Font = new Font("AniMe Matrix - MB_EN", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblDashCooldown.ForeColor = Color.Transparent;
+            lblDashCooldown.Location = new Point(497, 412);
+            lblDashCooldown.Name = "lblDashCooldown";
+            lblDashCooldown.Size = new Size(230, 29);
+            lblDashCooldown.TabIndex = 11;
+            lblDashCooldown.Text = "Dash: Ready!";
+            lblDashCooldown.Click += CoolDown_Click;
+            // 
+            // lblGameOver1
+            // 
+            lblGameOver1.BackColor = Color.Black;
+            lblGameOver1.Font = new Font("AniMe Matrix - MB_EN", 47.9999924F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblGameOver1.ForeColor = Color.Lime;
+            lblGameOver1.Location = new Point(-9, 0);
+            lblGameOver1.Name = "lblGameOver1";
+            lblGameOver1.Size = new Size(814, 482);
+            lblGameOver1.TabIndex = 12;
+            lblGameOver1.Text = "Gravity Runner";
+            lblGameOver1.TextAlign = ContentAlignment.MiddleCenter;
+            lblGameOver1.Click += lblGameOver1_Click;
+            // 
+            // lblGameOver2
+            // 
+            lblGameOver2.BackColor = Color.Black;
+            lblGameOver2.Font = new Font("AniMe Matrix - MB_EN", 14.25F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblGameOver2.ForeColor = SystemColors.AppWorkspace;
+            lblGameOver2.Location = new Point(228, 284);
+            lblGameOver2.Name = "lblGameOver2";
+            lblGameOver2.Size = new Size(366, 34);
+            lblGameOver2.TabIndex = 13;
+            lblGameOver2.Text = "Press enter to restart";
+            // 
+            // lblSpeedLvl
+            // 
+            lblSpeedLvl.AutoSize = true;
+            lblSpeedLvl.BackColor = Color.Transparent;
+            lblSpeedLvl.Font = new Font("AniMe Matrix - MB_EN", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblSpeedLvl.ForeColor = SystemColors.Control;
+            lblSpeedLvl.Location = new Point(12, 9);
+            lblSpeedLvl.Name = "lblSpeedLvl";
+            lblSpeedLvl.Size = new Size(269, 29);
+            lblSpeedLvl.TabIndex = 14;
+            lblSpeedLvl.Text = "Speed Level: 10";
+            lblSpeedLvl.Click += lblSpeedLvl_Click;
+            // 
+            // lblPowerupMiniTimer
+            // 
+            lblPowerupMiniTimer.AutoSize = true;
+            lblPowerupMiniTimer.BackColor = Color.Transparent;
+            lblPowerupMiniTimer.FlatStyle = FlatStyle.Popup;
+            lblPowerupMiniTimer.Font = new Font("AniMe Matrix - MB_EN", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblPowerupMiniTimer.ForeColor = Color.SpringGreen;
+            lblPowerupMiniTimer.Location = new Point(480, 445);
+            lblPowerupMiniTimer.Name = "lblPowerupMiniTimer";
+            lblPowerupMiniTimer.Size = new Size(276, 29);
+            lblPowerupMiniTimer.TabIndex = 15;
+            lblPowerupMiniTimer.Text = "Powerup: none";
+            // 
             // Gioco
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.background_still;
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(788, 450);
+            ClientSize = new Size(788, 483);
+            Controls.Add(lblGameOver2);
+            Controls.Add(lblGameOver1);
+            Controls.Add(lblPowerupMiniTimer);
+            Controls.Add(lblSpeedLvl);
+            Controls.Add(pictureBox7);
+            Controls.Add(lblDashCooldown);
             Controls.Add(lblhighScore);
             Controls.Add(lblScore);
             Controls.Add(pictureBox1);
             Controls.Add(pictureBox4);
             Controls.Add(pictureBox2);
             Controls.Add(pictureBox6);
-            Controls.Add(player);
-            Controls.Add(pictureBox7);
             Controls.Add(pictureBox5);
             Controls.Add(pictureBox8);
             Controls.Add(pictureBox3);
+            Controls.Add(player);
             DoubleBuffered = true;
+            MaximizeBox = false;
             Name = "Gioco";
             Text = "Gravity RUn";
             KeyUp += KeyIsUp;
@@ -233,5 +310,10 @@
         private PictureBox pictureBox6;
         private PictureBox pictureBox7;
         private PictureBox pictureBox8;
+        private Label lblDashCooldown;
+        private Label lblGameOver1;
+        private Label lblGameOver2;
+        private Label lblSpeedLvl;
+        private Label lblPowerupMiniTimer;
     }
 }

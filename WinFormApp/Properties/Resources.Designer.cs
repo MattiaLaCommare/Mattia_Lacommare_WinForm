@@ -113,6 +113,46 @@ namespace WinFormApp.Properties {
         /// <summary>
         ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Dash_Down {
+            get {
+                object obj = ResourceManager.GetObject("Dash_Down", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Dash_Shield_Down {
+            get {
+                object obj = ResourceManager.GetObject("Dash_Shield_Down", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Dash_Shield_Up {
+            get {
+                object obj = ResourceManager.GetObject("Dash_Shield_Up", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Dash_Up {
+            get {
+                object obj = ResourceManager.GetObject("Dash_Up", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Matrix {
             get {
                 object obj = ResourceManager.GetObject("Matrix", resourceCulture);
@@ -283,6 +323,16 @@ namespace WinFormApp.Properties {
         /// <summary>
         ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Rocks2 {
+            get {
+                object obj = ResourceManager.GetObject("Rocks2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap run_down0 {
             get {
                 object obj = ResourceManager.GetObject("run_down0", resourceCulture);
@@ -296,6 +346,56 @@ namespace WinFormApp.Properties {
         internal static System.Drawing.Bitmap run_up0 {
             get {
                 object obj = ResourceManager.GetObject("run_up0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Shield_Down {
+            get {
+                object obj = ResourceManager.GetObject("Shield_Down", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Shield_Ending_Down {
+            get {
+                object obj = ResourceManager.GetObject("Shield_Ending_Down", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Shield_Ending_Up {
+            get {
+                object obj = ResourceManager.GetObject("Shield_Ending_Up", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Shield_Up {
+            get {
+                object obj = ResourceManager.GetObject("Shield_Up", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Cerca una risorsa localizzata di tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ShieldPwrp {
+            get {
+                object obj = ResourceManager.GetObject("ShieldPwrp", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -118,20 +118,35 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="platform_tilesblue1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\platform_tilesblue.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="platform_tilesgray1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\platform_tilesgray.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Powerup" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Powerup.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="run_up0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\run_up0.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Rocks1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Rocks.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Shield_Up" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Shield_Up.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="platform_green" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\platform_green.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Citadel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Citadel.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Shield_Ending_Up" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Shield_Ending_Up.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="platform_tilesMatrix" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\platform_tilesMatrix.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Crate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Crate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ShieldPwrp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ShieldPwrp.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="platform_tilesSunset" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\platform_tilesSunset.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -144,6 +159,9 @@
   </data>
   <data name="MountainsForest" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\MountainsForest.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Rocks2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Rocks.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="City" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\City.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -160,11 +178,20 @@
   <data name="Rocks" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Rocks.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Dash_Up" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Dash_Up.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="platform_tilesgray" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\platform_tilesgray.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="platform_tilesblue1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\platform_tilesblue.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="source" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\source.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Dash_Down" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Dash_Down.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="background_still" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\background_still.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -184,8 +211,11 @@
   <data name="box" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\box.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Citadel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Citadel.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Shield_Ending_Down" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Shield_Ending_Down.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Powerup" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Powerup.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="MountainsSunny" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\MountainsSunny.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -193,16 +223,16 @@
   <data name="platform_green1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\platform_green.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="platform_tilesgray1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\platform_tilesgray.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="platform_tilesblue" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\platform_tilesblue.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="run_up0" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\run_up0.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Shield_Down" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Shield_Down.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Rocks1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Rocks.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Dash_Shield_Down" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Dash_Shield_Down.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Dash_Shield_Up" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Dash_Shield_Up.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
