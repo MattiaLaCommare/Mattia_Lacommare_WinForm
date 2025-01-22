@@ -227,7 +227,7 @@
             lblGameOver2.Name = "lblGameOver2";
             lblGameOver2.Size = new Size(366, 34);
             lblGameOver2.TabIndex = 13;
-            lblGameOver2.Text = "Press enter to restart";
+            lblGameOver2.Text = "Press enter to start";
             // 
             // lblSpeedLvl
             // 
@@ -282,6 +282,7 @@
             MaximizeBox = false;
             Name = "Gioco";
             Text = "Gravity RUn";
+            Load += Gioco_Load;
             KeyUp += KeyIsUp;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
@@ -297,6 +298,7 @@
         }
 
         #endregion
+
 
         private PictureBox pictureBox1;
         private PictureBox pictureBox2;

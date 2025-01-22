@@ -1,28 +1,26 @@
-using System.Diagnostics.Eventing.Reader;
 using System.Media;
-using System.Windows.Forms;
 
 namespace WinFormApp
 {
     public partial class Gioco : Form
     {
-        //-----------------------------------------------------------------------------------------------------------------VARIABILI GLOBALI
-        int gravity;  
-        int gravityValue; 
+        //----------------------------------------------------------------------------------------------------------------VARIABILI GLOBALI
+        int gravity;
+        int gravityValue;
         int obstacleSpeed; //Velocità del gioco 
-        int score = 0; 
+        int score = 0;
         int level = 0; //livello per aumentare la velocità
         int powerupMiniTimer = 5; //secondi del powerup quandoa attivato
         int highScore = 0;
         bool gameOver = false; //se perdi
         bool powerup = false; //scudo (solo quello)
-        bool dash = false; 
-        bool onTopPlatform = false; 
-        bool onBottomPlatform = false; 
+        bool dash = false;
+        bool onTopPlatform = false;
+        bool onBottomPlatform = false;
         bool powerupAntiFor = false; //serve per non far ripetere durante gametimer un azione specifica riguardante il powerup
         bool startGame = true; //quando inizia il gioco bisogna avviare il gioco la prima volta e poi non c'è più
         Random random = new Random();
-        //-----------------------------------------------------------------------------------------------------------------------------SUONI
+        //----------------------------------------------------------------------------------------------------------------------------SUONI
         SoundPlayer land = new SoundPlayer(@"audio\Land.wav");  //atterraggio
         SoundPlayer jump = new SoundPlayer(@"audio\Jump.wav");  //salto
         SoundPlayer start = new SoundPlayer(@"audio\Speedup.wav"); //inizo il gioco - powerup
@@ -30,16 +28,16 @@ namespace WinFormApp
         SoundPlayer dashSound = new SoundPlayer(@"audio\Dash.wav"); //dash
         SoundPlayer death = new SoundPlayer(@"audio\Death.wav"); //morte
         SoundPlayer startGameMusic = new SoundPlayer(@"audio\StartGame.wav"); // musica background per l'avvio
-        //----------------------------------------------------------------------------------------------------------------------------TIMERS
+        //---------------------------------------------------------------------------------------------------------------------------TIMERS
         private System.Windows.Forms.Timer powerUpTimer = new System.Windows.Forms.Timer();  //5 secondi, durata powerup
         private System.Windows.Forms.Timer dashTimer = new System.Windows.Forms.Timer(); //durata dash
         private System.Windows.Forms.Timer pwpLabelTimer = new System.Windows.Forms.Timer(); //timer per label powerup
         private System.Windows.Forms.Timer dashCoolDown = new System.Windows.Forms.Timer();  //cooldown dash
 
-        //-----------------------------------------------------------------------------------------------------------------COSTRUTTORE GIOCO
+        //----------------------------------------------------------------------------------------------------------------COSTRUTTORE GIOCO
         public Gioco()//quando si avvia parte prima di tutto questo 
         {
-            //---------------------------------------------------------------------------------------------------------------SETUP TIMERS
+            //-----------------------------------------------------------------------------------------------------------------SETUP TIMERS
             pwpLabelTimer.Interval = 1000;
             pwpLabelTimer.Tick += pwpLabelTimer_Tick;
             powerUpTimer.Interval = 5000;
@@ -53,8 +51,9 @@ namespace WinFormApp
             InitializeComponent();
             if (startGame)
             {
-                startGameMusic.Play(); 
+                startGameMusic.Play();
                 lblGameOver1.Text = "Gravity Runner";
+                lblGameOver2.Text = "press enter to start";
                 lblGameOver1.ForeColor = Color.Lime;
                 lblGameOver1.Visible = true;
                 gameOver = true; //Così posso cliccare "enter" dato il blocco per il restart
@@ -68,10 +67,10 @@ namespace WinFormApp
         }
 
 
-        //---------------------------------------------------------------------------------------------------------------------------COMANDI
+        //--------------------------------------------------------------------------------------------------------------------------COMANDI
         private void KeyIsUp(object sender, KeyEventArgs e) //keyeventargs è quando un tasto è schiacciato
         {
-            if (e.KeyCode == Keys.Space) //---------------------------------------------------------------------------------------COMANDI - SPAZIO
+            if (e.KeyCode == Keys.Space) //--------------------------------------------------------------------------------COMANDI - SPAZIO
             {
                 if (player.Top == 328) //top platform
                 {
@@ -86,11 +85,11 @@ namespace WinFormApp
                     jump.Play();
                 }
             }
-            if (e.KeyCode == Keys.Enter && gameOver)  //blocco per evitare lo spam di restart -----------------------------------COMANDI - INVIA
+            if (e.KeyCode == Keys.Enter && gameOver)  //blocco per evitare lo spam di restart ------------------------------COMANDI - INVIO
             {
                 RestartGame();
             }
-            if (e.KeyCode == Keys.C && !dash && !gameOver) //funzionalità intera dash ---------------------------------------------------------COMANDI - C
+            if (e.KeyCode == Keys.C && !dash && !gameOver) //funzionalità intera dash -----------------------------------------COMANDI - C
             {
                 dash = true;
                 gravity = 0; //rimane fermo a mezz'aria
@@ -103,7 +102,7 @@ namespace WinFormApp
                     player.Size = new Size(120, 80);
                     if (onTopPlatform) //sprites se si ha anche il powerup
                     {
-                        player.Image = Properties.Resources.Dash_Shield_Up; 
+                        player.Image = Properties.Resources.Dash_Shield_Up;
                     }
                     else if (onBottomPlatform)
                     {
@@ -126,12 +125,12 @@ namespace WinFormApp
             }
         }
 
-        //---------------------------------------------------------------------------------------------------------------------- AVVIO GIOCO
+        //--------------------------------------------------------------------------------------------------------------------- AVVIO GIOCO
         private void RestartGame() //vale anche per restart
         {
-            //--------------------------------------------------------------------------------------------------------------.SELETTORE MAPPE
-            int backgroundLoader = random.Next(1, 7);
-            switch (backgroundLoader)  //7 mappe diverse random
+            //------------------------------------------------------------------------------------------------------------SELETTORE MAPPE
+            int backgroundLoader = random.Next(1, 6);
+            switch (backgroundLoader)  //6 mappe diverse random
             {
                 case 1:
                     this.BackgroundImage = Properties.Resources.background_still; //città blu
@@ -144,32 +143,27 @@ namespace WinFormApp
                     this.pictureBox2.BackgroundImage = Properties.Resources.platform_tilesPurple;
                     break;
                 case 3:
-                    this.BackgroundImage = Properties.Resources.Space; //spazio
-                    this.pictureBox1.BackgroundImage = Properties.Resources.Powerup;
-                    this.pictureBox2.BackgroundImage = Properties.Resources.Powerup;
-                    break;
-                case 4:
                     this.BackgroundImage = Properties.Resources.MountainsForest; //foresta tranquilla
                     this.pictureBox1.BackgroundImage = Properties.Resources.platform_green;
                     this.pictureBox2.BackgroundImage = Properties.Resources.platform_green;
                     break;
-                case 5:
+                case 4:
                     this.BackgroundImage = Properties.Resources.Matrix; //matrix (il mio preferito)
                     this.pictureBox1.BackgroundImage = Properties.Resources.platform_tilesMatrix;
                     this.pictureBox2.BackgroundImage = Properties.Resources.platform_tilesMatrix;
                     break;
-                case 6:
+                case 5:
                     this.BackgroundImage = Properties.Resources.Sunset; //tramonto
                     this.pictureBox1.BackgroundImage = Properties.Resources.platform_tilesSunset;
                     this.pictureBox2.BackgroundImage = Properties.Resources.platform_tilesSunset;
                     break;
-                case 7:
+                case 6:
                     this.BackgroundImage = Properties.Resources.MountainsSunny; //montagne soleggiate
                     this.pictureBox1.BackgroundImage = Properties.Resources.platform_green;
                     this.pictureBox2.BackgroundImage = Properties.Resources.platform_green;
                     break;
             }
-            //------------------------------------------------------------------------------------------------------------------RESET STATS
+            //----------------------------------------------------------------------------------------------------------------RESET STATS
             player.Image = Properties.Resources.run_down0;
             player.Location = new Point(180, 149);
             score = 0;
@@ -181,13 +175,13 @@ namespace WinFormApp
             gameOver = false;
             powerup = false;
 
-            //--------------------------------------------------------------------------------------------------------------PARENTELE LABLES
+            //-----------------------------------------------------------------------------------------------------------PARENTELE LABLES
             lblScore.Parent = pictureBox2;       //parentele utilizzate per impostare la trasparenza degli oggetti
             lblhighScore.Parent = pictureBox2;
             lblDashCooldown.Parent = pictureBox2;
             lblSpeedLvl.Parent = pictureBox1;
             lblPowerupMiniTimer.Parent = pictureBox2;
-            //------------------------------------------------------------------------------------------------------------------SETUP LABLES
+            //---------------------------------------------------------------------------------------------------------------SETUP LABLES
             lblDashCooldown.Top = 10;
             lblPowerupMiniTimer.Top = 40;
             lblScore.Top = 10;
@@ -197,7 +191,7 @@ namespace WinFormApp
 
             start.Play();
 
-            //--------------------------------------------------------------------------------------------------------------NASCITA OSTACOLI
+            //-----------------------------------------------------------------------------------------------------------NASCITA OSTACOLI
             foreach (Control x in this.Controls) //di solito sono pictureboxes, sono oggetti con rappresentazioni visuali
             {
                 if (x is PictureBox && (string)x.Tag == "obstacle")
@@ -207,25 +201,25 @@ namespace WinFormApp
             }
             foreach (Control x in this.Controls)
             {
-                if (x is PictureBox && (string)x.Tag == "Shield") //-----------------------------------------------------------------POWERUP
+                if (x is PictureBox && (string)x.Tag == "Shield") //--------------------------------------------------------NASCITA POWERUP
                 {
-                    x.Left = random.Next(10000, 20000);
+                    x.Left = random.Next(5000, 20000);
                 }
             }
             gameTimer.Start();
         }
 
-        //-----------------------------------------------------------------------------------------------------------------------TIMER GIOCO
+        //--------------------------------------------------------------------------------------------------------------------TIMER GIOCO
         private void GameTimerEvent(object sender, EventArgs e) //il timer del gioco, si aggiorna molto velocemente 
         {
             //-----------------------------------------------------------------------------------------------------------IMPOSTAZIONE LABELS
             lblScore.ForeColor = Color.White;
             lblScore.Text = "Score: " + score;
             lblhighScore.Text = "High Score: " + highScore;
-            
+
             if (dash) { lblDashCooldown.Text = "Dash: Not Ready!"; }
             else { lblDashCooldown.Text = "Dash: Ready!"; }
-            
+
             lblSpeedLvl.Text = "Speed Level: " + level;
 
             //------------------------------------------------------------------------------------------------------IMPOSTAZIONE PERSONAGGIO
@@ -273,7 +267,7 @@ namespace WinFormApp
                 }
 
                 land.Play();
-                
+
                 onTopPlatform = true;
                 onBottomPlatform = false;
                 dashCoolDown.Stop();
@@ -289,9 +283,9 @@ namespace WinFormApp
                     //---------------------------------------------------------------------------------------------------------------RESPAWN
                     if (x.Left < -100)
                     {
-                            x.Left = random.Next(1000, 4000);
-                            score += 1;
-                            obstacleSkip.Play();
+                        x.Left = random.Next(1000, 4000);
+                        score += 1;
+                        obstacleSkip.Play();
                     }
 
                     //----------------------------------------------------------------------------------------------------------------HITBOX
@@ -305,6 +299,7 @@ namespace WinFormApp
 
                             //setup label per il gameover
                             lblGameOver1.Text = "Game Over";
+                            lblGameOver2.Text = "press enter to restart";
                             lblGameOver1.ForeColor = Color.Red;
                             lblGameOver1.Visible = true;
                             lblGameOver2.Visible = true;
@@ -326,12 +321,12 @@ namespace WinFormApp
 
                     if (x.Left < -100)
                     {
-                        x.Left = random.Next(10000, 20000);
+                        x.Left = random.Next(1000, 20000);
                     }
                     //--------------------------------------------------------------------------------------------------------HITBOX POWERUP
                     if (x.Bounds.IntersectsWith(player.Bounds) && !powerupAntiFor)
                     {//powerup serve per non ripetersi nel foreach o gametimer
-                    
+
                         player.Left -= 20; //per ingrandirlo
                         powerup = true;
                         powerupAntiFor = true;
@@ -341,7 +336,7 @@ namespace WinFormApp
                         pwpLabelTimer.Start();
 
                         lblPowerupMiniTimer.Text = "Powerup: " + powerupMiniTimer + "s"; //inizia il timer
-                        
+
                         start.Play();
                     }
                 }
@@ -367,7 +362,7 @@ namespace WinFormApp
                 }
             }
         }
-        private void powerupTimer_Tick(object sender, EventArgs e) //---------------------------------------------------TIMER DURATA POWERUP
+        private void powerupTimer_Tick(object sender, EventArgs e) //------------------------------------------------TIMER DURATA POWERUP
         {
             if (powerup) //setup delle sprites
             {
@@ -386,7 +381,7 @@ namespace WinFormApp
             player.Size = new Size(66, 80);
         }
 
-        private void dashTimer_Tick(Object sender, EventArgs e) //---------------------------------------------------------TIMER DURATA DASH
+        private void dashTimer_Tick(Object sender, EventArgs e) //------------------------------------------------------TIMER DURATA DASH
         {
             if (dash)
             {
@@ -394,8 +389,8 @@ namespace WinFormApp
                 dashTimer.Stop();
 
                 obstacleSpeed = obstacleSpeed - 10 * 5;  //velocità aumentata del dash
-                
-                
+
+
                 player.Left += 40; //cambio grandezza e carico sprites
                 player.Size = new Size(66, 80);
                 if (onTopPlatform)
@@ -410,13 +405,13 @@ namespace WinFormApp
                 }
             }
         }
-        private void dashCoolDown_Tick(object sender, EventArgs e) //---------------------------------------------TIMER DURATA COOLDOWN DASH
+        private void dashCoolDown_Tick(object sender, EventArgs e) //-----------------------------------------TIMER DURATA COOLDOWN DASH
         {
             dash = false;
             dashCoolDown.Stop();
         }
 
-        private void pwpLabelTimer_Tick(object sender, EventArgs e) //---------------------------------------------TIMER LABEL POWERUP TEMPO
+        private void pwpLabelTimer_Tick(object sender, EventArgs e) //-----------------------------------------TIMER LABEL POWERUP TEMPO
         {
             if (powerupMiniTimer > 0) //se è più grande scende
             {
@@ -432,7 +427,7 @@ namespace WinFormApp
 
 
 
-        //----------------------------------------------------------------------------------------------------------------------COSE INUTILI
+        //------------------------------------------------------------------------------------------------------------------COSE INUTILI
         private void pictureBox3_Click(object sender, EventArgs e) { }
         private void player_Click(object sender, EventArgs e) { }
         private void lblhighScore_Click(object sender, EventArgs e) { }
@@ -440,6 +435,6 @@ namespace WinFormApp
         private void PowerupTime(object sender, EventArgs e) { }
         private void lblSpeedLvl_Click(object sender, EventArgs e) { }
         private void lblGameOver1_Click(object sender, EventArgs e) { }
-
+        private void Gioco_Load(object sender, EventArgs e) { }
     }
 }
