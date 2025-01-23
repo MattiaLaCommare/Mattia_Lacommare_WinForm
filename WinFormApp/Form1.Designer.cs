@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Gioco));
             pictureBox1 = new PictureBox();
             pictureBox2 = new PictureBox();
             player = new PictureBox();
@@ -97,7 +98,7 @@
             pictureBox3.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox3.TabIndex = 3;
             pictureBox3.TabStop = false;
-            pictureBox3.Tag = "obstacle";
+            pictureBox3.Tag = "obstacleWithoutHbx";
             pictureBox3.Click += pictureBox3_Click;
             // 
             // pictureBox4
@@ -116,11 +117,11 @@
             // 
             lblScore.AutoSize = true;
             lblScore.BackColor = Color.Transparent;
-            lblScore.Font = new Font("AniMe Matrix - MB_EN", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblScore.Font = new Font("Pixelify Sans", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblScore.ForeColor = SystemColors.Control;
             lblScore.Location = new Point(12, 412);
             lblScore.Name = "lblScore";
-            lblScore.Size = new Size(155, 29);
+            lblScore.Size = new Size(106, 29);
             lblScore.TabIndex = 5;
             lblScore.Text = "Score: 0";
             // 
@@ -128,11 +129,11 @@
             // 
             lblhighScore.AutoSize = true;
             lblhighScore.BackColor = Color.Transparent;
-            lblhighScore.Font = new Font("AniMe Matrix - MB_EN", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblhighScore.Font = new Font("Pixelify Sans", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblhighScore.ForeColor = SystemColors.Control;
             lblhighScore.Location = new Point(12, 445);
             lblhighScore.Name = "lblhighScore";
-            lblhighScore.Size = new Size(232, 29);
+            lblhighScore.Size = new Size(159, 29);
             lblhighScore.TabIndex = 6;
             lblhighScore.Text = "High Score: 0";
             lblhighScore.Click += lblhighScore_Click;
@@ -161,7 +162,7 @@
             pictureBox6.Image = Properties.Resources.Stop_sign;
             pictureBox6.Location = new Point(436, 284);
             pictureBox6.Name = "pictureBox6";
-            pictureBox6.Size = new Size(52, 121);
+            pictureBox6.Size = new Size(53, 123);
             pictureBox6.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox6.TabIndex = 8;
             pictureBox6.TabStop = false;
@@ -183,7 +184,7 @@
             // 
             pictureBox8.BackColor = Color.Transparent;
             pictureBox8.Image = Properties.Resources.Crate;
-            pictureBox8.Location = new Point(545, 45);
+            pictureBox8.Location = new Point(518, 45);
             pictureBox8.Name = "pictureBox8";
             pictureBox8.Size = new Size(35, 35);
             pictureBox8.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -196,11 +197,11 @@
             lblDashCooldown.AutoSize = true;
             lblDashCooldown.BackColor = Color.Transparent;
             lblDashCooldown.FlatStyle = FlatStyle.Popup;
-            lblDashCooldown.Font = new Font("AniMe Matrix - MB_EN", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblDashCooldown.Font = new Font("Pixelify Sans", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblDashCooldown.ForeColor = Color.Transparent;
-            lblDashCooldown.Location = new Point(497, 412);
+            lblDashCooldown.Location = new Point(557, 412);
             lblDashCooldown.Name = "lblDashCooldown";
-            lblDashCooldown.Size = new Size(230, 29);
+            lblDashCooldown.Size = new Size(160, 29);
             lblDashCooldown.TabIndex = 11;
             lblDashCooldown.Text = "Dash: Ready!";
             lblDashCooldown.Click += CoolDown_Click;
@@ -208,9 +209,9 @@
             // lblGameOver1
             // 
             lblGameOver1.BackColor = Color.Black;
-            lblGameOver1.Font = new Font("AniMe Matrix - MB_EN", 47.9999924F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblGameOver1.Font = new Font("Pixelify Sans", 72F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblGameOver1.ForeColor = Color.Lime;
-            lblGameOver1.Location = new Point(-9, 0);
+            lblGameOver1.Location = new Point(0, 0);
             lblGameOver1.Name = "lblGameOver1";
             lblGameOver1.Size = new Size(814, 482);
             lblGameOver1.TabIndex = 12;
@@ -221,23 +222,24 @@
             // lblGameOver2
             // 
             lblGameOver2.BackColor = Color.Black;
-            lblGameOver2.Font = new Font("AniMe Matrix - MB_EN", 14.25F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            lblGameOver2.Font = new Font("Pixelify Sans", 20.2499981F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblGameOver2.ForeColor = SystemColors.AppWorkspace;
             lblGameOver2.Location = new Point(228, 284);
             lblGameOver2.Name = "lblGameOver2";
             lblGameOver2.Size = new Size(366, 34);
             lblGameOver2.TabIndex = 13;
             lblGameOver2.Text = "Press enter to start";
+            lblGameOver2.TextAlign = ContentAlignment.TopCenter;
             // 
             // lblSpeedLvl
             // 
             lblSpeedLvl.AutoSize = true;
             lblSpeedLvl.BackColor = Color.Transparent;
-            lblSpeedLvl.Font = new Font("AniMe Matrix - MB_EN", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblSpeedLvl.Font = new Font("Pixelify Sans", 21.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblSpeedLvl.ForeColor = SystemColors.Control;
             lblSpeedLvl.Location = new Point(12, 9);
             lblSpeedLvl.Name = "lblSpeedLvl";
-            lblSpeedLvl.Size = new Size(269, 29);
+            lblSpeedLvl.Size = new Size(221, 35);
             lblSpeedLvl.TabIndex = 14;
             lblSpeedLvl.Text = "Speed Level: 10";
             lblSpeedLvl.Click += lblSpeedLvl_Click;
@@ -247,11 +249,11 @@
             lblPowerupMiniTimer.AutoSize = true;
             lblPowerupMiniTimer.BackColor = Color.Transparent;
             lblPowerupMiniTimer.FlatStyle = FlatStyle.Popup;
-            lblPowerupMiniTimer.Font = new Font("AniMe Matrix - MB_EN", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblPowerupMiniTimer.Font = new Font("Pixelify Sans", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblPowerupMiniTimer.ForeColor = Color.SpringGreen;
-            lblPowerupMiniTimer.Location = new Point(480, 445);
+            lblPowerupMiniTimer.Location = new Point(557, 445);
             lblPowerupMiniTimer.Name = "lblPowerupMiniTimer";
-            lblPowerupMiniTimer.Size = new Size(276, 29);
+            lblPowerupMiniTimer.Size = new Size(179, 29);
             lblPowerupMiniTimer.TabIndex = 15;
             lblPowerupMiniTimer.Text = "Powerup: none";
             // 
@@ -279,9 +281,11 @@
             Controls.Add(pictureBox3);
             Controls.Add(player);
             DoubleBuffered = true;
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "Gioco";
-            Text = "Gravity RUn";
+            Text = "Gravity Runner";
             Load += Gioco_Load;
             KeyUp += KeyIsUp;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();

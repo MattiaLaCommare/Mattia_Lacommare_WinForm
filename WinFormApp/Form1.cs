@@ -1,4 +1,5 @@
 using System.Media;
+using System.Windows.Forms;
 
 namespace WinFormApp
 {
@@ -33,11 +34,10 @@ namespace WinFormApp
         private System.Windows.Forms.Timer dashTimer = new System.Windows.Forms.Timer(); //durata dash
         private System.Windows.Forms.Timer pwpLabelTimer = new System.Windows.Forms.Timer(); //timer per label powerup
         private System.Windows.Forms.Timer dashCoolDown = new System.Windows.Forms.Timer();  //cooldown dash
-
         //----------------------------------------------------------------------------------------------------------------COSTRUTTORE GIOCO
         public Gioco()//quando si avvia parte prima di tutto questo 
         {
-            //-----------------------------------------------------------------------------------------------------------------SETUP TIMERS
+            //------------------------------------------------------------------------------------------------SETUP TIMERS
             pwpLabelTimer.Interval = 1000;
             pwpLabelTimer.Tick += pwpLabelTimer_Tick;
             powerUpTimer.Interval = 5000;
@@ -46,8 +46,7 @@ namespace WinFormApp
             dashTimer.Tick += dashTimer_Tick;
             dashCoolDown.Interval = 1000;
             dashCoolDown.Tick += dashCoolDown_Tick;
-
-            //-----------------------------------------------------------------------------------------------------------SCHERMATA INIZIALE
+            //-------------------------------------------------------------------------------------------------SCHERMATA INIZIALE
             InitializeComponent();
             if (startGame)
             {
@@ -65,12 +64,10 @@ namespace WinFormApp
                 start.Play();
             }
         }
-
-
         //--------------------------------------------------------------------------------------------------------------------------COMANDI
         private void KeyIsUp(object sender, KeyEventArgs e) //keyeventargs è quando un tasto è schiacciato
         {
-            if (e.KeyCode == Keys.Space) //--------------------------------------------------------------------------------COMANDI - SPAZIO
+            if (e.KeyCode == Keys.Space) //------------------------------------------------------------------------------SPAZIO
             {
                 if (player.Top == 328) //top platform
                 {
@@ -85,17 +82,18 @@ namespace WinFormApp
                     jump.Play();
                 }
             }
-            if (e.KeyCode == Keys.Enter && gameOver)  //blocco per evitare lo spam di restart ------------------------------COMANDI - INVIO
+            if (e.KeyCode == Keys.Enter && gameOver)  //blocco per evitare lo spam di restart ---------------------------INVIO
             {
                 RestartGame();
             }
-            if (e.KeyCode == Keys.C && !dash && !gameOver) //funzionalità intera dash -----------------------------------------COMANDI - C
+            if (e.KeyCode == Keys.C && !dash && !gameOver) //funzionalità intera dash ----------------------------------- C
             {
                 dash = true;
                 gravity = 0; //rimane fermo a mezz'aria
                 obstacleSpeed = obstacleSpeed + 10 * 5;
                 dashTimer.Start(); //timer x durata dash
                 dashSound.Play();
+                //-----------------------------------------------------------------------------------SPRITES DASH
                 if (powerup)
                 {
                     player.Left -= 40;
@@ -124,11 +122,10 @@ namespace WinFormApp
                 }
             }
         }
-
         //--------------------------------------------------------------------------------------------------------------------- AVVIO GIOCO
         private void RestartGame() //vale anche per restart
-        {
-            //------------------------------------------------------------------------------------------------------------SELETTORE MAPPE
+        { 
+            //-------------------------------------------------------------------------------------------------SELETTORE MAPPE
             int backgroundLoader = random.Next(1, 6);
             switch (backgroundLoader)  //6 mappe diverse random
             {
@@ -163,7 +160,7 @@ namespace WinFormApp
                     this.pictureBox2.BackgroundImage = Properties.Resources.platform_green;
                     break;
             }
-            //----------------------------------------------------------------------------------------------------------------RESET STATS
+            //-------------------------------------------------------------------------------------------------RESET STATS
             player.Image = Properties.Resources.run_down0;
             player.Location = new Point(180, 149);
             score = 0;
@@ -174,65 +171,65 @@ namespace WinFormApp
             onBottomPlatform = true;
             gameOver = false;
             powerup = false;
-
-            //-----------------------------------------------------------------------------------------------------------PARENTELE LABLES
-            lblScore.Parent = pictureBox2;       //parentele utilizzate per impostare la trasparenza degli oggetti
+            //----------------------------------------------------------------------------------------------PARENTELE LABLES
+            lblScore.Parent = pictureBox2;//per impostare la trasparenza degli oggetti
             lblhighScore.Parent = pictureBox2;
             lblDashCooldown.Parent = pictureBox2;
             lblSpeedLvl.Parent = pictureBox1;
             lblPowerupMiniTimer.Parent = pictureBox2;
-            //---------------------------------------------------------------------------------------------------------------SETUP LABLES
+            //------------------------------------------------------------------------------------------------SETUP LABLES
             lblDashCooldown.Top = 10;
             lblPowerupMiniTimer.Top = 40;
             lblScore.Top = 10;
             lblhighScore.Top = 40;
             lblGameOver1.Visible = false;
             lblGameOver2.Visible = false;
-
             start.Play();
-
-            //-----------------------------------------------------------------------------------------------------------NASCITA OSTACOLI
-            foreach (Control x in this.Controls) //di solito sono pictureboxes, sono oggetti con rappresentazioni visuali
-            {
-                if (x is PictureBox && (string)x.Tag == "obstacle")
-                {
-                    x.Left = random.Next(1000, 6000);
-                }
-            }
+            //---------------------------------------------------------------------------------------------NASCITA OSTACOLI
             foreach (Control x in this.Controls)
             {
-                if (x is PictureBox && (string)x.Tag == "Shield") //--------------------------------------------------------NASCITA POWERUP
+                if (x is PictureBox && (string)x.Tag == "obstacle")//-------------------OSTACOLI NORMALI
+                {
+                    OverlapCheck(x);
+                }
+                if (x is PictureBox && (string)x.Tag == "obstacleWithoutHbx")//----OSTACOLI SENZA HITBOX (ESTERNA)
+                {
+                    OverlapCheck(x);
+                }
+            }
+            //----------------------------------------------------------------------------POWERUP
+            foreach (Control x in this.Controls)
+            {
+                if (x is PictureBox && (string)x.Tag == "Shield") 
                 {
                     x.Left = random.Next(5000, 20000);
                 }
             }
             gameTimer.Start();
         }
-
         //--------------------------------------------------------------------------------------------------------------------TIMER GIOCO
-        private void GameTimerEvent(object sender, EventArgs e) //il timer del gioco, si aggiorna molto velocemente 
+        private void GameTimerEvent(object sender, EventArgs e) // """fps"""
         {
-            //-----------------------------------------------------------------------------------------------------------IMPOSTAZIONE LABELS
+            //--------------------------------------------------------------------------------------------IMPOSTAZIONE LABELS
             lblScore.ForeColor = Color.White;
             lblScore.Text = "Score: " + score;
             lblhighScore.Text = "High Score: " + highScore;
-
             if (dash) { lblDashCooldown.Text = "Dash: Not Ready!"; }
             else { lblDashCooldown.Text = "Dash: Ready!"; }
-
             lblSpeedLvl.Text = "Speed Level: " + level;
 
-            //------------------------------------------------------------------------------------------------------IMPOSTAZIONE PERSONAGGIO
+            //------------------------------------------------------------------------------------------IMPOSTAZIONE PERSONAGGIO
             player.Top += gravity;
             onBottomPlatform = true;
 
-            //-------------------------------------------------------------------------------------------------------ATTERRAGGIO PLATFORM SU
+            //-------------------------------------------------------------------------------------------ATTERRAGGIO PLATFORM SU
             if (player.Top > 328) //posizione BottomPlatform 
             {
                 gravity = 0;
                 player.Top = 328;
+                land.Play();
 
-                if (powerup) //cambia la sprite se ha il powerup
+                if (powerup) //------------------------------------------------------SPRITES ATTERRAGGIO
                 {
                     player.Image = Properties.Resources.Shield_Up; //sarebbe down
                     player.Size = new Size(86, 80);
@@ -242,7 +239,6 @@ namespace WinFormApp
                     player.Image = Properties.Resources.run_down0;
                 }
 
-                land.Play();
                 //setta in che piattaforma è il player ora
                 onBottomPlatform = true;
                 onTopPlatform = false;
@@ -250,11 +246,12 @@ namespace WinFormApp
                 dashCoolDown.Stop();
                 dash = false;
             }
-            //-----------------------------------------------------------------------------------------------------ATTERRAGGIO PLATFORM GIU'
+            //-----------------------------------------------------------------------------------------ATTERRAGGIO PLATFORM GIU'
             else if (player.Top < 35) //Posizione TopPlatForm
             {
                 gravity = 0;
                 player.Top = 35;
+                land.Play();
 
                 if (powerup)
                 {
@@ -265,54 +262,60 @@ namespace WinFormApp
                 {
                     player.Image = Properties.Resources.run_up0;
                 }
-
-                land.Play();
-
                 onTopPlatform = true;
                 onBottomPlatform = false;
                 dashCoolDown.Stop();
                 dash = false;
             }
-            //------------------------------------------------------------------------------------------------------RESPAWN OSTACOLI + SCORE
+            //------------------------------------------------------------------------------------------RESPAWN OSTACOLI + SCORE
             foreach (Control x in this.Controls)
             {
                 if (x is PictureBox && (string)x.Tag == "obstacle")
                 {
                     x.Left -= obstacleSpeed;  //gli ostacoli si muovono verso sinistra
-
-                    //---------------------------------------------------------------------------------------------------------------RESPAWN
+                    Rectangle HitboxRocce = new Rectangle(pictureBox3.Left + 20, pictureBox3.Top + 20, pictureBox3.Width - 20, pictureBox3.Height - 20); //hitbox esterna più accurata
                     if (x.Left < -100)
                     {
-                        x.Left = random.Next(1000, 4000);
-                        score += 1;
-                        obstacleSkip.Play();
+                            score += 1;
+                            obstacleSkip.Play();
+                            OverlapCheck(x);
                     }
-
-                    //----------------------------------------------------------------------------------------------------------------HITBOX
-                    if (x.Bounds.IntersectsWith(player.Bounds))
+                    //-------------------------------------------------------------------------------------CONTROLLO GAMEOVER
+                    if (x.Bounds.IntersectsWith(player.Bounds) || player.Bounds.IntersectsWith(HitboxRocce))
                     {
-                        if (powerup == false)
-                        {
-                            death.Play();
-                            gameOver = true;
-                            gameTimer.Stop(); //si ferma il gioco
-
-                            //setup label per il gameover
-                            lblGameOver1.Text = "Game Over";
-                            lblGameOver2.Text = "press enter to restart";
-                            lblGameOver1.ForeColor = Color.Red;
-                            lblGameOver1.Visible = true;
-                            lblGameOver2.Visible = true;
-                            //set the highscore
-                            if (score > highScore)
-                            {
-                                highScore = score;
-                            }
-                        }
+                        GameOver();
                     }
                 }
-            }
-            //---------------------------------------------------------------------------------------------------------------RESPAWN POWERUP
+                //---------------------------------------------------------------------------------------RESPAWN ROCCIA (NO HB)
+                if (x is PictureBox && (string)x.Tag == "obstacleWithoutHbx")
+                {
+                    x.Left -= obstacleSpeed;
+                    if (x.Left < -100)
+                    {
+                        score += 1;
+                        obstacleSkip.Play();
+                        bool overlapping; //overlap check manuale perchè bisogna anche contare l'altro tipo, se no non funziona
+                        do
+                        {
+                            overlapping = false;
+                            x.Left = random.Next(1000, 6000);
+
+                            foreach (Control other in this.Controls)
+                            {
+                                if (other != x && other is PictureBox && (string)other.Tag == "obstacle")
+                                {
+                                    if (x.Bounds.IntersectsWith(other.Bounds))
+                                    {
+                                        overlapping = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        } while (overlapping);
+                    }
+                }
+            } 
+            //-----------------------------------------------------------------------------------------------RESPAWN POWERUP
             foreach (Control x in this.Controls)
             {
                 if (x is PictureBox && (string)x.Tag == "Shield")
@@ -321,9 +324,9 @@ namespace WinFormApp
 
                     if (x.Left < -100)
                     {
-                        x.Left = random.Next(1000, 20000);
+                        x.Left = random.Next(5000, 20000);
                     }
-                    //--------------------------------------------------------------------------------------------------------HITBOX POWERUP
+                    //---------------------------------------------------------------------------------------HITBOX POWERUP
                     if (x.Bounds.IntersectsWith(player.Bounds) && !powerupAntiFor)
                     {//powerup serve per non ripetersi nel foreach o gametimer
 
@@ -341,8 +344,7 @@ namespace WinFormApp
                     }
                 }
             }
-
-            //-------------------------------------------------------------------------------------------------------------------DIFFICOLTA'
+            //------------------------------------------------------------------------------------------------DIFFICOLTA'
             for (int i = 9; i < score; i++)
             {
                 if (!dash)
@@ -355,14 +357,14 @@ namespace WinFormApp
 
                         if (i > 9)
                         {
-                            obstacleSpeed = 15 + ((i / 10) * 10);
+                            obstacleSpeed = 15 + ((i / 10) * 5);
                             gravityValue = 10 + ((i / 10) * 10);
                         }
                     }
                 }
             }
         }
-        private void powerupTimer_Tick(object sender, EventArgs e) //------------------------------------------------TIMER DURATA POWERUP
+        private void powerupTimer_Tick(object sender, EventArgs e) //-------------------------------------------------TIMER DURATA POWERUP
         {
             if (powerup) //setup delle sprites
             {
@@ -380,7 +382,6 @@ namespace WinFormApp
             player.Top += 20; //rimpicciolisco il player per farlo tornare normale
             player.Size = new Size(66, 80);
         }
-
         private void dashTimer_Tick(Object sender, EventArgs e) //------------------------------------------------------TIMER DURATA DASH
         {
             if (dash)
@@ -410,7 +411,6 @@ namespace WinFormApp
             dash = false;
             dashCoolDown.Stop();
         }
-
         private void pwpLabelTimer_Tick(object sender, EventArgs e) //-----------------------------------------TIMER LABEL POWERUP TEMPO
         {
             if (powerupMiniTimer > 0) //se è più grande scende
@@ -423,10 +423,48 @@ namespace WinFormApp
                 lblPowerupMiniTimer.Text = "Powerup: none";
             }
         }
+        private void OverlapCheck(Control x)
+        {
+            bool overlapping;
+            do
+            {
+                overlapping = false;
+                x.Left = random.Next(1000, 6000);
 
+                foreach (Control other in this.Controls)
+                {
+                    if (other != x && other is PictureBox && (string)other.Tag == "obstacle")
+                    {
+                        if (x.Bounds.IntersectsWith(other.Bounds))
+                        {
+                            overlapping = true;
+                            break;
+                        }
+                    }
+                }
+            } while (overlapping);
+        }
+        private void GameOver()
+        {
+            if (powerup == false)
+            {
+                death.Play();
+                gameOver = true;
+                gameTimer.Stop(); //si ferma il gioco
 
-
-
+                //setup label per il gameover
+                lblGameOver1.Text = "Game Over";
+                lblGameOver2.Text = "press enter to restart";
+                lblGameOver1.ForeColor = Color.Red;
+                lblGameOver1.Visible = true;
+                lblGameOver2.Visible = true;
+                //set the highscore
+                if (score > highScore)
+                {
+                    highScore = score;
+                }
+            }
+        }
         //------------------------------------------------------------------------------------------------------------------COSE INUTILI
         private void pictureBox3_Click(object sender, EventArgs e) { }
         private void player_Click(object sender, EventArgs e) { }
