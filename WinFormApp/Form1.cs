@@ -8,9 +8,9 @@ namespace WinFormApp
         //----------------------------------------------------------------------------------------------------------------VARIABILI GLOBALI
         int gravity;
         int gravityValue;
-        int obstacleSpeed; //Velocit‡ del gioco 
+        int obstacleSpeed; //Velocit√† del gioco 
         int score = 0;
-        int level = 0; //livello per aumentare la velocit‡
+        int level = 0; //livello per aumentare la velocit√†
         int powerupMiniTimer = 5; //secondi del powerup quandoa attivato
         int highScore = 0;
         bool gameOver = false; //se perdi
@@ -19,7 +19,7 @@ namespace WinFormApp
         bool onTopPlatform = false;
         bool onBottomPlatform = false;
         bool powerupAntiFor = false; //serve per non far ripetere durante gametimer un azione specifica riguardante il powerup
-        bool startGame = true; //quando inizia il gioco bisogna avviare il gioco la prima volta e poi non c'Ë pi˘
+        bool startGame = true; //quando inizia il gioco bisogna avviare il gioco la prima volta e poi non c'√® pi√π
         Random random = new Random();
         //----------------------------------------------------------------------------------------------------------------------------SUONI
         SoundPlayer land = new SoundPlayer(@"audio\Land.wav");  //atterraggio
@@ -55,7 +55,7 @@ namespace WinFormApp
                 lblGameOver2.Text = "press enter to start";
                 lblGameOver1.ForeColor = Color.Lime;
                 lblGameOver1.Visible = true;
-                gameOver = true; //CosÏ posso cliccare "enter" dato il blocco per il restart
+                gameOver = true; //Cos√¨ posso cliccare "enter" dato il blocco per il restart
             }
             else
             {
@@ -65,9 +65,9 @@ namespace WinFormApp
             }
         }
         //--------------------------------------------------------------------------------------------------------------------------COMANDI
-        private void KeyIsUp(object sender, KeyEventArgs e) //keyeventargs Ë quando un tasto Ë schiacciato
+        private void KeyIsUp(object sender, KeyEventArgs e) //keyeventargs √® quando un tasto √® schiacciato
         {
-            if (e.KeyCode == Keys.Space) //------------------------------------------------------------------------------SPAZIO
+            if (e.KeyCode == Keys.Space && !dash) //------------------------------------------------------------------------------SPAZIO
             {
                 if (player.Top == 328) //top platform
                 {
@@ -86,7 +86,7 @@ namespace WinFormApp
             {
                 RestartGame();
             }
-            if (e.KeyCode == Keys.C && !dash && !gameOver) //funzionalit‡ intera dash ----------------------------------- C
+            if (e.KeyCode == Keys.C && !dash && !gameOver) //funzionalit√† intera dash ----------------------------------- C
             {
                 dash = true;
                 gravity = 0; //rimane fermo a mezz'aria
@@ -130,7 +130,7 @@ namespace WinFormApp
             switch (backgroundLoader)  //6 mappe diverse random
             {
                 case 1:
-                    this.BackgroundImage = Properties.Resources.background_still; //citt‡ blu
+                    this.BackgroundImage = Properties.Resources.background_still; //citt√† blu
                     this.pictureBox1.BackgroundImage = Properties.Resources.platform_tilesblue;
                     this.pictureBox2.BackgroundImage = Properties.Resources.platform_tilesblue;
                     break;
@@ -239,10 +239,10 @@ namespace WinFormApp
                     player.Image = Properties.Resources.run_down0;
                 }
 
-                //setta in che piattaforma Ë il player ora
+                //setta in che piattaforma √® il player ora
                 onBottomPlatform = true;
                 onTopPlatform = false;
-                //se atterra in una piattaforma il cooldown per il dash si resetta (si puÚ spammare per terra)
+                //se atterra in una piattaforma il cooldown per il dash si resetta (si pu√≤ spammare per terra)
                 dashCoolDown.Stop();
                 dash = false;
             }
@@ -273,7 +273,7 @@ namespace WinFormApp
                 if (x is PictureBox && (string)x.Tag == "obstacle")
                 {
                     x.Left -= obstacleSpeed;  //gli ostacoli si muovono verso sinistra
-                    Rectangle HitboxRocce = new Rectangle(pictureBox3.Left + 20, pictureBox3.Top + 20, pictureBox3.Width - 20, pictureBox3.Height - 20); //hitbox esterna pi˘ accurata
+                    Rectangle HitboxRocce = new Rectangle(pictureBox3.Left + 20, pictureBox3.Top + 20, pictureBox3.Width - 20, pictureBox3.Height - 20); //hitbox esterna pi√π accurata
                     if (x.Left < -100)
                     {
                             score += 1;
@@ -294,7 +294,7 @@ namespace WinFormApp
                     {
                         score += 1;
                         obstacleSkip.Play();
-                        bool overlapping; //overlap check manuale perchË bisogna anche contare l'altro tipo, se no non funziona
+                        bool overlapping; //overlap check manuale perch√® bisogna anche contare l'altro tipo, se no non funziona
                         do
                         {
                             overlapping = false;
@@ -333,7 +333,7 @@ namespace WinFormApp
                         player.Left -= 20; //per ingrandirlo
                         powerup = true;
                         powerupAntiFor = true;
-                        powerupMiniTimer = 4; //parte da 4 perchË un secondo lo spreca 1 tick del circuito  
+                        powerupMiniTimer = 4; //parte da 4 perch√® un secondo lo spreca 1 tick del circuito  
 
                         powerUpTimer.Start(); //start timers
                         pwpLabelTimer.Start();
@@ -352,8 +352,8 @@ namespace WinFormApp
                     if (i % 10 == 0)  // Ogni 10 punti
                     {
                         level = i / 10;  // Determina il livello in base al punteggio
-                        obstacleSpeed = obstacleSpeed + (level * 5);  // Aumenta la velocit‡ in base al livello
-                        gravityValue = gravityValue + (level * 10);  // Aumenta la gravit‡ in base al livello
+                        obstacleSpeed = obstacleSpeed + (level * 5);  // Aumenta la velocit√† in base al livello
+                        gravityValue = gravityValue + (level * 10);  // Aumenta la gravit√† in base al livello
 
                         if (i > 9)
                         {
@@ -389,7 +389,7 @@ namespace WinFormApp
                 dashCoolDown.Start(); //timers
                 dashTimer.Stop();
 
-                obstacleSpeed = obstacleSpeed - 10 * 5;  //velocit‡ aumentata del dash
+                obstacleSpeed = obstacleSpeed - 10 * 5;  //velocit√† aumentata del dash
 
 
                 player.Left += 40; //cambio grandezza e carico sprites
@@ -397,7 +397,7 @@ namespace WinFormApp
                 if (onTopPlatform)
                 {
                     player.Image = Properties.Resources.run_up0;
-                    gravity -= gravityValue; //ritorna alla gravit‡ che aveva prima di fare il dash
+                    gravity -= gravityValue; //ritorna alla gravit√† che aveva prima di fare il dash
                 }
                 else if (onBottomPlatform)
                 {
@@ -413,7 +413,7 @@ namespace WinFormApp
         }
         private void pwpLabelTimer_Tick(object sender, EventArgs e) //-----------------------------------------TIMER LABEL POWERUP TEMPO
         {
-            if (powerupMiniTimer > 0) //se Ë pi˘ grande scende
+            if (powerupMiniTimer > 0) //se √® pi√π grande scende
             {
                 powerupMiniTimer--;
                 lblPowerupMiniTimer.Text = "Powerup: " + powerupMiniTimer + "s";
