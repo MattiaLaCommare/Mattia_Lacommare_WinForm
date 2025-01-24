@@ -294,24 +294,7 @@ namespace WinFormApp
                     {
                         score += 1;
                         obstacleSkip.Play();
-                        bool overlapping; //overlap check manuale perchè bisogna anche contare l'altro tipo, se no non funziona
-                        do
-                        {
-                            overlapping = false;
-                            x.Left = random.Next(1000, 6000);
-
-                            foreach (Control other in this.Controls)
-                            {
-                                if (other != x && other is PictureBox && (string)other.Tag == "obstacle")
-                                {
-                                    if (x.Bounds.IntersectsWith(other.Bounds))
-                                    {
-                                        overlapping = true;
-                                        break;
-                                    }
-                                }
-                            }
-                        } while (overlapping);
+                        OverlapCheck(x);
                     }
                 }
             } 
