@@ -69,13 +69,13 @@ namespace WinFormApp
         {
             if (e.KeyCode == Keys.Space && !dash) //------------------------------------------------------------------------------SPAZIO
             {
-                if (player.Top == 328) //top platform
+                if (player.Top == 328)
                 {
                     player.Top -= 10;
                     gravity = -gravityValue;
                     jump.Play();
                 }
-                else if (player.Top == 35) //bottom platform
+                else if (player.Top == 35)
                 {
                     player.Top += 10;
                     gravity = gravityValue;
